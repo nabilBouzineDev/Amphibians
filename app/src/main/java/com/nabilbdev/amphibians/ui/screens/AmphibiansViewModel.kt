@@ -11,12 +11,13 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.nabilbdev.amphibians.AmphibiansInfoApplication
 import com.nabilbdev.amphibians.data.AmphibiansInfoRepository
+import com.nabilbdev.amphibians.model.AmphibiansInfo
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
 sealed interface AmphibiansUIState {
-    data class Success(val info: String) : AmphibiansUIState
+    data class Success(val amphibiansInfos: List<AmphibiansInfo>) : AmphibiansUIState
     object Error : AmphibiansUIState
     object Loading : AmphibiansUIState
 
@@ -33,15 +34,12 @@ class AmphibiansViewModel(private val amphibiansInfoRepository: AmphibiansInfoRe
         getAmphibianInfo()
     }
 
-    private fun getAmphibianInfo() {
+    fun getAmphibianInfo() {
         viewModelScope.launch {
 
             amphibiansUIState = AmphibiansUIState.Loading
             amphibiansUIState = try {
-                val listResult = amphibiansInfoRepository.getAmphibiansInfo()
-                AmphibiansUIState.Success(
-                    "Success: ${listResult.size} numbers are fetched"
-                )
+                AmphibiansUIState.Success(amphibiansInfoRepository.getAmphibiansInfo())
             } catch (e: IOException) {
                 AmphibiansUIState.Error
             } catch (e: HttpException) {

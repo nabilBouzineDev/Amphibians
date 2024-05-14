@@ -12,6 +12,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.nabilbdev.amphibians.R
@@ -22,6 +23,7 @@ import com.nabilbdev.amphibians.ui.screens.HomeScreen
 fun AmphibiansApp() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             AmphibiansTopAppBar(
                 scrollBehavior = scrollBehavior
@@ -32,6 +34,7 @@ fun AmphibiansApp() {
             viewModel(factory = AmphibiansViewModel.Factory)
         HomeScreen(
             amphibiansUIState = amphibiansViewModel.amphibiansUIState,
+            retryOption = amphibiansViewModel::getAmphibianInfo,
             modifier = Modifier.padding(it)
         )
     }
