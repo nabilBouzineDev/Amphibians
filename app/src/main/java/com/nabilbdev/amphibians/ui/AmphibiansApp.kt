@@ -28,7 +28,8 @@ fun AmphibiansApp() {
             )
         }
     ) {
-        val amphibiansViewModel: AmphibiansViewModel = viewModel()
+        val amphibiansViewModel: AmphibiansViewModel =
+            viewModel(factory = AmphibiansViewModel.Factory)
         HomeScreen(
             amphibiansUIState = amphibiansViewModel.amphibiansUIState,
             modifier = Modifier.padding(it)
